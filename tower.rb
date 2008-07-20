@@ -75,6 +75,7 @@ class Enemy
 
   def initialize(window)
     @images = Gosu::Image::load_tiles(window, "enemy.bmp", 50, 50, false)
+    @window = window
     @frame = 1
     @distance = 0
     @x = 150
@@ -82,6 +83,7 @@ class Enemy
   end
 
   def update
+    exit_event
     @distance += 1
   end
     
@@ -94,6 +96,11 @@ class Enemy
     @distance
   end
   
+  def exit_event
+    if @distance > 480
+      @window.remove_enemy(self)
+    end
+  end
 end
 
 class GameWindow < Gosu::Window
@@ -144,6 +151,10 @@ class GameWindow < Gosu::Window
   
   def add_projectile(projectile)
     self.projectiles << projectile
+  end
+    
+  def remove_enemy(enemy)
+    @enemies.delete(enemy)
   end
 end
 
