@@ -61,6 +61,7 @@ class GameWindow < Gosu::Window
     @towers = []
     @projectiles = []
     @enemies = []
+    @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
   end
 
   def update
@@ -73,6 +74,8 @@ class GameWindow < Gosu::Window
     (@towers + @projectiles + @enemies).each do |object|
       object.draw
     end
+
+    @font.draw("Prepare for craziness!", 230, 10, 0, 1.0, 1.0, 0xffffff00)
   end
 
   def button_down(id)
