@@ -7,7 +7,7 @@ require 'round'
 class GameWindow < Gosu::Window
   GRID_WIDTH = 32
   GRID_HEIGHT = 32
-  GRID_COLOR = 0x5500ff00
+  GRID_COLOR = 0x3300ff00
   
   attr_accessor :towers, :projectiles, :enemies, :credits
   
@@ -18,6 +18,8 @@ class GameWindow < Gosu::Window
 
     @grid_rows = rows
     @grid_columns = columns
+    @grid = Array.new(columns).collect { |a| Array.new(rows) }
+    
     @towers = []
     @projectiles = []
     @enemies = []
@@ -28,7 +30,7 @@ class GameWindow < Gosu::Window
     @potential_tower = Tower.new(self)
     @rounds = []
     
-    # setup_basic_towers
+    recalculate_grid
   end
 
   def init_keyboard_constants
@@ -44,12 +46,26 @@ class GameWindow < Gosu::Window
     current_round.send_enemy if current_round && current_round.send_enemy_now?
   end
   
+  def recalculate_grid
+    @grid.each_with_index do |column, x|
+      column.each_with_index do |cell, y|
+        @grid[x][y] = rand(10)
+      end
+    end
+  end
+  
   def draw_grid
+    @grid_columns.times do |distance|
+      draw_line(GRID_WIDTH * distance, 0, GRID_COLOR, GRID_WIDTH * distance, height, GRID_COLOR)
+    end
     @grid_rows.times do |distance|
       draw_line(0, GRID_HEIGHT * distance, GRID_COLOR, width, GRID_HEIGHT * distance, GRID_COLOR)
     end
-    @grid_columns.times do |distance|
-      draw_line(GRID_WIDTH * distance, 0, GRID_COLOR, GRID_WIDTH * distance, height, GRID_COLOR)
+    
+    @grid.each_with_index do |column, x|
+      column.each_with_index do |cell, y|
+        @font.draw(cell, x * GRID_WIDTH + 9, y * GRID_HEIGHT + 9, 0, 1.0, 1.0, GRID_COLOR)
+      end
     end
   end
 
@@ -72,7 +88,7 @@ class GameWindow < Gosu::Window
         if @rounds.size > 0
           "Round Finished, press N"
         else
-          "Press the N to start"
+          "Press the N key to start"
         end
 
       @font.draw(text, width / 2 - 80, height / 2, 0, 1.0, 1.0, 0xffffff00)
