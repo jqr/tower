@@ -128,8 +128,9 @@ class GameWindow < Gosu::Window
   end
     
   def remove_enemy(enemy)
-    @enemies.delete(enemy)
-    @credits += enemy.credit_value
+    if @enemies.delete(enemy)
+      @credits += enemy.credit_value
+    end
   end
   
   def remove_projectile(projectile)
