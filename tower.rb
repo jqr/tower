@@ -51,7 +51,7 @@ class Projectile
     @y = y
     @speed = speed
     @window = window
-    @damage = 50
+    @damage = 45 + rand(10)
     attacking(enemy)
   end
   
