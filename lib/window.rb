@@ -8,6 +8,7 @@ class GameWindow < Gosu::Window
   
   def initialize
     super(640, 480, false)
+    init_keyboard_constants
     self.caption = "Tower"
     @towers = []
     @projectiles = []
@@ -23,6 +24,12 @@ class GameWindow < Gosu::Window
     # setup_basic_towers
   end
 
+  def init_keyboard_constants
+    ('a'..'z').each do |letter|
+      eval "Gosu::Kb#{letter.upcase} = #{self.char_to_button_id(letter)}"
+    end
+  end
+  
   def update
     (@towers + @projectiles + @enemies).each do |object|
       object.update
@@ -45,9 +52,9 @@ class GameWindow < Gosu::Window
     if round_completed?
       text = 
         if @rounds.size > 0
-          "Round Finished, press space to start next round"
+          "Round Finished, press N to start next round"
         else
-          "Press the space bar to start the flood of enemies"
+          "Press the N to start the flood of enemies"
         end
 
       @font.draw(text, 120, 240, 0, 1.0, 1.0, 0xffffff00)
@@ -66,7 +73,7 @@ class GameWindow < Gosu::Window
     case id
     when Gosu::Button::KbEscape
       close
-    when Gosu::Button::KbSpace
+    when Gosu::KbN
       start_round if round_completed?
     when Gosu::Button::MsLeft
       place_tower(mouse_x, mouse_y)
