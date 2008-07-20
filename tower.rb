@@ -35,27 +35,38 @@ class Tower
   
   def fire_projectile_at(enemy)
     @reload = 100
-    @window.projectiles << Projectile.new(@window, x, y, enemy)
+    @window.projectiles << Projectile.new(@window, x, y, 3, enemy)
   end
 end
 
 class Projectile
   attr_accessor :x, :y
 
-  def initialize(window, x, y, enemy)
+  def initialize(window, x, y, speed, enemy)
     @image = Gosu::Image::load_tiles(window, "projectile.png", 25, 25, false).first
     @x = x
     @y = y
     @enemy = enemy
+    @speed = speed
   end
   
   def update
-    @x += @enemy.x > x ? 1 : -1
-    @y += @enemy.y > y ? 1 : -1
+    @x += track(@enemy.x, x) * @speed
+    @y += track(@enemy.y, y) * @speed
   end
 
   def draw
     @image.draw(x, y, 0)
+  end
+  
+  def track(tracking, current)
+    if tracking == current
+      0
+    elsif tracking > current
+      1
+    else
+      -1
+    end
   end
 end
 
