@@ -71,7 +71,7 @@ class GameWindow < Gosu::Window
   end
 
   def draw
-    (@towers + @projectiles + @enemies).each do |object|
+    (@towers + @projectiles + @enemies).reverse.each do |object|
       object.draw
     end
 
