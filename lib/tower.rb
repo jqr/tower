@@ -8,6 +8,7 @@ class Tower
     @y = y
     @radius = radius
     @reload = 0
+    place
   end
   
   def update
@@ -36,6 +37,13 @@ class Tower
   def fire_projectile_at(enemy)
     @reload = 100
     @window.add_projectile(Projectile.new(@window, x - @image.width / 2, y - @image.height / 2, 3, enemy))
+  end
+  
+  def place
+    x_r = Range.new(0, 640).to_a.reject{|x| (x % 32) != 0}
+    y_r = Range.new(0, 480).to_a.reject{|x| (x % 32) != 0}
+    self.x = x_r.detect{|i| (x.to_i >= i) && (x.to_i <= (i + 32))}
+    self.y = y_r.detect{|i| (y.to_i >= i) && (y.to_i <= (i + 32))}
   end
   
   def cost
