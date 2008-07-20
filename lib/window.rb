@@ -41,7 +41,7 @@ class GameWindow < Gosu::Window
       object.draw
     end
 
-    @font.draw("Enemies: #{@enemies.size}", 540, 10, 0, 1.0, 1.0, 0xffffff00)
+    @font.draw("Round: #{@rounds.size}", 540, 10, 0, 1.0, 1.0, 0xffffff00)
     @font.draw("Moneys: #{@credits}", 10, 10, 0, 1.0, 1.0, 0xffffff00)
 
     if @enemies_exited > 0
