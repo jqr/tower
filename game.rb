@@ -158,7 +158,7 @@ class Round
   end
   
   def enemy_count
-    50
+    20
   end
 end
 
@@ -177,9 +177,10 @@ class GameWindow < Gosu::Window
     @credits = 500
     @potential_tower = Tower.new(self)
     @enemies_sent_this_round = 0
-    @round = Round.new(self, 1)
+    @rounds = []
     @send_enemy_counter = 0
-    setup_basic_towers
+    # setup_basic_towers
+    start_round
   end
 
   def update
@@ -211,11 +212,21 @@ class GameWindow < Gosu::Window
     case id
     when Gosu::Button::KbEscape
       close
+    when Gosu::Button::KbSpace
+      start_round
     when Gosu::Button::MsLeft
       place_tower(mouse_x, mouse_y)
     end
   end
   
+  def start_round
+    @rounds << Round.new(self, @rounds.size + 1)
+  end
+
+  def current_round
+    @rounds.last
+  end
+    
   def place_tower(m_x, m_y)
     tower = Tower.new(self, m_x, m_y, 150)
     if @credits >= tower.cost
@@ -232,7 +243,7 @@ class GameWindow < Gosu::Window
   end
   
   def round_completed?
-    @enemies_sent_this_round == @round.enemy_count
+    @enemies_sent_this_round == current_round.enemy_count
   end
   
   def increment_enemies_sent_this_round
@@ -240,7 +251,7 @@ class GameWindow < Gosu::Window
   end
   
   def send_enemy
-    while send_enemy_now? && @enemies_sent_this_round < @round.enemy_count
+    while send_enemy_now? && @enemies_sent_this_round < current_round.enemy_count
       @enemies << Enemy.new(self, rand(640), 0)
       increment_enemies_sent_this_round
     end
