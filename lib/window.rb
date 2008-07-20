@@ -27,8 +27,7 @@ class GameWindow < Gosu::Window
     (@towers + @projectiles + @enemies).each do |object|
       object.update
     end
-    @send_enemy_counter += 1
-    send_enemy if round_started?
+    current_round.send_enemy if current_round && current_round.running?
   end
 
   def draw
@@ -36,8 +35,7 @@ class GameWindow < Gosu::Window
       object.draw
     end
 
-    # @font.draw("Enemies: #{@enemies.size}", 540, 10, 0, 1.0, 1.0, 0xffffff00)
-
+    @font.draw("Enemies: #{@enemies.size}", 540, 10, 0, 1.0, 1.0, 0xffffff00)
     @font.draw("Moneys: #{@credits}", 10, 10, 0, 1.0, 1.0, 0xffffff00)
 
     if @enemies_exited > 0
@@ -75,14 +73,16 @@ class GameWindow < Gosu::Window
   end
   
   def start_round
-    @rounds << Round.new(self, @rounds.size + 1)
-    current_round.start
+    @rounds << Round.new(self, @rounds.size + 1) do
+      send_enemy
+    end
+    current_round.start!
   end
   
-  def round_started?
-    @rounds.size > 0 && !round_completed?
+  def send_enemy
+    @enemies << Enemy.new(self, rand(640), 0)
   end
-
+  
   def current_round
     @rounds.last
   end
@@ -109,23 +109,7 @@ class GameWindow < Gosu::Window
   def round_completed?
     all_enemies_sent? && @enemies.size == 0
   end
-  
-  def increment_enemies_sent_this_round
-    current_round.enemy_sent
-  end
-  
-  def send_enemy
-    while send_enemy_now? && !current_round.all_enemies_sent?
-      @enemies << Enemy.new(self, rand(640), 0)
-      increment_enemies_sent_this_round
-    end
-  end
-  
-  def send_enemy_now?
-     # Need to use a Timer!
-     @send_enemy_counter >= 120 && @send_enemy_counter = 0
-  end
-  
+    
   def add_projectile(projectile)
     self.projectiles << projectile
   end
