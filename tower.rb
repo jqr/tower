@@ -43,7 +43,7 @@ class Tower
 end
 
 class Projectile
-  attr_accessor :x, :y
+  attr_accessor :x, :y, :damage
 
   def initialize(window, x, y, speed, enemy)
     @image = Gosu::Image::load_tiles(window, "projectile.png", 25, 25, false).first
@@ -52,6 +52,7 @@ class Projectile
     @enemy = enemy
     @speed = speed
     @window = window
+    @damage = 50
   end
   
   def update
@@ -76,8 +77,8 @@ class Projectile
   
   def hit
     if @x == @enemy.x && @y == @enemy.y
-      @window.remove_enemy(@enemy)
       @window.remove_projectile(self)
+      @enemy.hit(self)
     end
     
     if !@window.enemies.include?(@enemy)
@@ -87,7 +88,7 @@ class Projectile
 end
 
 class Enemy
-  attr_accessor :x, :y, :distance
+  attr_accessor :x, :y, :distance, :health
 
   def initialize(window)
     @images = Gosu::Image::load_tiles(window, "enemy.bmp", 50, 50, false)
@@ -96,6 +97,7 @@ class Enemy
     @distance = 0
     @x = 150
     @y = 0
+    @health = 100
   end
 
   def update
@@ -110,6 +112,15 @@ class Enemy
   
   def y
     @distance
+  end
+  
+  def hit(projectile)
+    @health -= projectile.damage
+    destroy if @health <= 0
+  end
+
+  def destroy
+    @window.remove_enemy(self)
   end
   
   def exit_event
