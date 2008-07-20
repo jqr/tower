@@ -110,7 +110,7 @@ class Enemy
     
   def draw
     frame = (@distance * 0.2) % @images.size
-    @images[frame.to_i].draw(x - 15, y - 15, 0)
+    @images[frame.to_i].draw(x - 15, y - 15, 0, 1, 1, 0xffffff00 + (health.to_f / 100 * 255).to_i)
     # draw_health
   end
   
