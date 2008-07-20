@@ -1,5 +1,6 @@
 require 'tower'
 require 'projectile'
+require 'explosive_projectile'
 require 'enemy'
 require 'round'
 

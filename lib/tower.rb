@@ -51,7 +51,11 @@ class Tower
   
   def fire_projectile_at(enemy)
     @reload = 100
-    @window.add_projectile(Projectile.new(@window, x, y, 3, enemy))
+    if rand(100) > 50
+      @window.add_projectile(Projectile.new(@window, x, y, 3, enemy))
+    else
+      @window.add_projectile(ExplosiveProjectile.new(@window, x, y, 3, enemy))
+    end
   end
 
   def place

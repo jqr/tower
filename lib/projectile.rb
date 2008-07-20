@@ -17,7 +17,11 @@ class Projectile
   end
 
   def draw
-    @image.draw(x, y, 0)
+    @image.draw(x, y, 0, 1, 1, color)
+  end
+  
+  def color
+    0xffffffff
   end
   
   def attacking(enemy)
