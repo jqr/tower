@@ -48,11 +48,13 @@ class Projectile
     @y = y
     @enemy = enemy
     @speed = speed
+    @window = window
   end
   
   def update
     @x += track(@enemy.x, x, @speed)
     @y += track(@enemy.y, y, @speed)
+    self.hit
   end
 
   def draw
@@ -66,6 +68,17 @@ class Projectile
       [speed, (tracking - current)].min
     else
       -[speed, (current - tracking)].min
+    end
+  end
+  
+  def hit
+    if @x == @enemy.x && @y == @enemy.y
+      @window.remove_enemy(@enemy)
+      @window.remove_projectile(self)
+    end
+    
+    if !@window.enemies.include?(@enemy)
+      @window.remove_projectile(self)
     end
   end
 end
@@ -155,6 +168,10 @@ class GameWindow < Gosu::Window
     
   def remove_enemy(enemy)
     @enemies.delete(enemy)
+  end
+  
+  def remove_projectile(projectile)
+    @projectiles.delete(projectile)
   end
 end
 
