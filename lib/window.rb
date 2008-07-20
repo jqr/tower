@@ -18,9 +18,7 @@ class GameWindow < Gosu::Window
     @cursor = Gosu::Image.new(self, "images/cursor.png", false)
     @credits = 400
     @potential_tower = Tower.new(self)
-    @enemies_sent_this_round = 0
     @rounds = []
-    @send_enemy_counter = 0
     # setup_basic_towers
   end
 
@@ -34,7 +32,7 @@ class GameWindow < Gosu::Window
     (@towers + @projectiles + @enemies).each do |object|
       object.update
     end
-    current_round.send_enemy if current_round && current_round.running?
+    current_round.send_enemy if current_round && current_round.send_enemy_now?
   end
 
   def draw

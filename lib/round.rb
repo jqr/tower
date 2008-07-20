@@ -16,7 +16,7 @@ class Round
   end
   
   def send_enemy
-    if send_enemy_now?
+    if running?
       @send_enemy.call
       @last_enemy_sent_at = @window.wall_time
       self.enemies_sent += 1
