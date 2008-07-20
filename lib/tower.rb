@@ -14,7 +14,7 @@ class Tower
   def update
     @reload -= 1 if @reload >= 1
     if reloaded? && enemy = enemy_to_kill
-      fire_projectile_at(enemy)
+      # fire_projectile_at(enemy)
     end
   end
 
@@ -82,5 +82,9 @@ class Tower
   
   def destroy
     @window.remove_tower(self)
+  end
+  
+  def collide_with?(thing_x, thing_y, thing_radius)
+    Gosu::distance(x, y, thing_x, thing_y) <= thing_radius
   end
 end

@@ -24,11 +24,10 @@ class Enemy
   end
   
   def move!
-    self.x, self.y = next_move(direction?)
-    @x, @y = x, y
+    self.x, self.y = next_move(heading)
   end
   
-  def direction?    
+  def heading
     case true
       when can_move_down?
         :down
@@ -42,16 +41,22 @@ class Enemy
   end  
   
   def can_move_down?
-    true
+    move_x, move_y = x, y + 20
+    !@window.towers.detect do |tower|
+      tower.collide_with?(move_x, move_y, 50)
+    end
   end
   
   def can_move_up?
+    true
   end
   
   def can_move_left?
+    true
   end
   
   def can_move_right?
+    true
   end
   
   def next_move(direction)
