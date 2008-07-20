@@ -4,7 +4,7 @@ require 'gosu'
 class Tower
   attr_accessor :x, :y
   
-  def initialize(window, x, y, radius)
+  def initialize(window, x = 0, y = 0, radius = 0)
     @window = window
     @image = Gosu::Image.new(window, "images/tower.png", false)
     @x = x
@@ -20,8 +20,8 @@ class Tower
     end
   end
 
-  def draw
-    @image.draw(x, y, 0)
+  def draw(opacity = 1)
+    @image.draw(x - @image.width / 2, y - @image.height / 2, 0, 1, 1, 0x00ffffff + ((opacity.to_f * 255).to_i << 24))
   end
   
   def reloaded?
@@ -160,6 +160,7 @@ class GameWindow < Gosu::Window
     @enemies_exited = 0
     @cursor = Gosu::Image.new(self, "images/cursor.png", false)
     @credits = 500
+    @potential_tower = Tower.new(self)
     setup_basic_towers
   end
 
@@ -177,6 +178,12 @@ class GameWindow < Gosu::Window
     # @font.draw("Enemies: #{@enemies.size}", 540, 10, 0, 1.0, 1.0, 0xffffff00)
     @font.draw("Enemies Exited: #{@enemies_exited}", 480, 10, 0, 1.0, 1.0, 0xffffff00)
     @font.draw("Moneys: #{@credits}", 100, 10, 0, 1.0, 1.0, 0xffffff00)
+    
+    if @potential_tower
+      @potential_tower.x = mouse_x
+      @potential_tower.y = mouse_y
+      @potential_tower.draw(0.5)
+    end
     @cursor.draw(mouse_x, mouse_y, 0)
   end
 
