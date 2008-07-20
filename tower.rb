@@ -93,13 +93,13 @@ end
 class Enemy
   attr_accessor :x, :y, :distance, :health
 
-  def initialize(window)
+  def initialize(window, x, y)
     @images = Gosu::Image::load_tiles(window, "images/enemy.bmp", 50, 50, false)
     @window = window
     @frame = 1
     @distance = 0
-    @x = 150
-    @y = 0
+    @x = x
+    @y = y
     @health = 100
   end
 
@@ -176,10 +176,12 @@ class GameWindow < Gosu::Window
   def setup_basic_towers
     @towers << Tower.new(self, 200, 100, 150)
     @towers << Tower.new(self, 100, 300, 150)
+    @towers << Tower.new(self, 400, 370, 150)
+    @towers << Tower.new(self, 500, 220, 150)
   end
   
   def send_enemy
-    @enemies << Enemy.new(self)
+    @enemies << Enemy.new(self, rand(640), 0)
   end
   
   def add_projectile(projectile)
