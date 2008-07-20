@@ -24,6 +24,14 @@ class Enemy
     # draw_health
   end
   
+  def center_x
+    x + @images.first.width / 2
+  end  
+
+  def center_y
+    y + @images.first.height / 2
+  end
+  
   def move!
     self.x, self.y = next_move(heading)
   end

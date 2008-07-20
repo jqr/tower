@@ -31,7 +31,18 @@ class Tower
       end
       
     @image.draw(x, y, 0, 1, 1, argb)
+    if enemy = enemy_to_kill
+      @window.draw_line(center_x, center_y, 0xffff0000, enemy.center_x, enemy.center_y, 0xffff0000)
+    end
   end
+  
+  def center_x
+    x + @image.width / 2
+  end  
+
+  def center_y
+    y + @image.height / 2
+  end  
   
   def reload_percent
     @reload.to_f / 100
