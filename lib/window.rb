@@ -102,6 +102,12 @@ class GameWindow < Gosu::Window
     end
   end
   
+  def tower_positions
+    @towers.collect do |tower|
+      tower.position
+    end
+  end
+  
   def setup_basic_towers
     @towers << Tower.new(self, 200, 100, 150)
     @towers << Tower.new(self, 100, 300, 150)
