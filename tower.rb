@@ -5,24 +5,32 @@ class Tower
   attr_accessor :x, :y
   
   def initialize(window, x, y)
+    @window = window
     @image = Gosu::Image.new(window, "tower.png", false)
     @x = x
     @y = y
   end
   
   def update
+    fire_projectile
   end
 
   def draw
     @image.draw(x, y, 0)
+  end
+  
+  def fire_projectile
+    @window.projectiles << Projectile.new(@window, x, y)
   end
 end
 
 class Projectile
   attr_accessor :x, :y
 
-  def initialize(window)
-    @image = Gosu::Image.new(window, "projectile.png", false)
+  def initialize(window, x, y)
+    @image = Gosu::Image::load_tiles(window, "projectile.png", 25, 25, false).first
+    @x = x
+    @y = y
   end
   
   def update
@@ -59,6 +67,8 @@ class Enemy
 end
 
 class GameWindow < Gosu::Window
+  attr_accessor :towers, :projectiles, :enemies
+  
   def initialize
     super(640, 480, false)
     self.caption = "Tower"
@@ -94,6 +104,7 @@ class GameWindow < Gosu::Window
   end
   
   def setup_basic_towers
+    @towers << Tower.new(self, 100, 100)
     @towers << Tower.new(self, 100, 300)
   end
   
