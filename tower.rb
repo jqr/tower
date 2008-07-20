@@ -49,33 +49,40 @@ class Projectile
     @image = Gosu::Image::load_tiles(window, "projectile.png", 25, 25, false).first
     @x = x
     @y = y
-    @enemy = enemy
     @speed = speed
     @window = window
     @damage = 50
+    attacking(enemy)
   end
   
   def update
-    @x += track(@enemy.x, x, @speed)
-    @y += track(@enemy.y, y, @speed)
-    self.hit
+    move
+    check_for_hit
   end
 
   def draw
     @image.draw(x, y, 0)
   end
   
-  def track(tracking, current, speed)
-    if tracking == current
-      0
-    elsif tracking > current
-      [speed, (tracking - current)].min
-    else
-      -[speed, (current - tracking)].min
-    end
+  def attacking(enemy)
+    @enemy = enemy
+    
+    x_distance = enemy.x - x
+    y_distance = enemy.y - y
+    largest = [x_distance.abs, y_distance.abs].max
+    
+    # FIXME: this does not properly limit speeds in two directions
+    @x_delta = x_distance.to_f / largest * @speed
+    @y_delta = y_distance.to_f / largest * @speed
   end
   
-  def hit
+  def move
+    attacking(@enemy)
+    @x += @x_delta
+    @y += @y_delta
+  end
+  
+  def check_for_hit
     if @x == @enemy.x && @y == @enemy.y
       @window.remove_projectile(self)
       @enemy.hit(self)
