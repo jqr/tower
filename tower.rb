@@ -6,7 +6,7 @@ class Tower
   
   def initialize(window, x, y, radius)
     @window = window
-    @image = Gosu::Image.new(window, "tower.png", false)
+    @image = Gosu::Image.new(window, "images/tower.png", false)
     @x = x
     @y = y
     @radius = radius
@@ -46,7 +46,7 @@ class Projectile
   attr_accessor :x, :y, :damage
 
   def initialize(window, x, y, speed, enemy)
-    @image = Gosu::Image::load_tiles(window, "projectile.png", 25, 25, false).first
+    @image = Gosu::Image::load_tiles(window, "images/projectile.png", 25, 25, false).first
     @x = x
     @y = y
     @speed = speed
@@ -94,7 +94,7 @@ class Enemy
   attr_accessor :x, :y, :distance, :health
 
   def initialize(window)
-    @images = Gosu::Image::load_tiles(window, "enemy.bmp", 50, 50, false)
+    @images = Gosu::Image::load_tiles(window, "images/enemy.bmp", 50, 50, false)
     @window = window
     @frame = 1
     @distance = 0
