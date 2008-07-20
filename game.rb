@@ -151,6 +151,17 @@ class Enemy
   end
 end
 
+class Round
+  def initialize(window, number)
+    @window = window
+    @number = number
+  end
+  
+  def enemy_count
+    50
+  end
+end
+
 class GameWindow < Gosu::Window
   attr_accessor :towers, :projectiles, :enemies
   
@@ -165,6 +176,9 @@ class GameWindow < Gosu::Window
     @cursor = Gosu::Image.new(self, "images/cursor.png", false)
     @credits = 500
     @potential_tower = Tower.new(self)
+    @enemies_sent_this_round = 0
+    @round = Round.new(self, 1)
+    @send_enemy_counter = 0
     setup_basic_towers
   end
 
@@ -172,6 +186,8 @@ class GameWindow < Gosu::Window
     (@towers + @projectiles + @enemies).each do |object|
       object.update
     end
+    @send_enemy_counter += 1
+    send_enemy
   end
 
   def draw
@@ -182,7 +198,7 @@ class GameWindow < Gosu::Window
     # @font.draw("Enemies: #{@enemies.size}", 540, 10, 0, 1.0, 1.0, 0xffffff00)
     @font.draw("Enemies Exited: #{@enemies_exited}", 480, 10, 0, 1.0, 1.0, 0xffffff00)
     @font.draw("Moneys: #{@credits}", 100, 10, 0, 1.0, 1.0, 0xffffff00)
-    
+    @font.draw("Round Finished", 240, 240, 0, 1.0, 1.0, 0xffffff00) if round_completed? && @enemies.empty?
     if @potential_tower
       @potential_tower.x = mouse_x
       @potential_tower.y = mouse_y
@@ -195,8 +211,6 @@ class GameWindow < Gosu::Window
     case id
     when Gosu::Button::KbEscape
       close
-    when Gosu::Button::KbSpace
-      send_enemy
     when Gosu::Button::MsLeft
       place_tower(mouse_x, mouse_y)
     end
@@ -217,8 +231,24 @@ class GameWindow < Gosu::Window
     @towers << Tower.new(self, 500, 220, 150)
   end
   
+  def round_completed?
+    @enemies_sent_this_round == @round.enemy_count
+  end
+  
+  def increment_enemies_sent_this_round
+    @enemies_sent_this_round += 1
+  end
+  
   def send_enemy
-    @enemies << Enemy.new(self, rand(640), 0)
+    while send_enemy_now? && @enemies_sent_this_round < @round.enemy_count
+      @enemies << Enemy.new(self, rand(640), 0)
+      increment_enemies_sent_this_round
+    end
+  end
+  
+  def send_enemy_now?
+     # Need to use a Timer!
+     @send_enemy_counter >= 120 && @send_enemy_counter = 0
   end
   
   def add_projectile(projectile)
