@@ -48,6 +48,6 @@ class Enemy
   end
   
   def credit_value
-    10
+    15
   end
 end

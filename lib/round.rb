@@ -12,7 +12,7 @@ class Round
   end
   
   def enemy_count
-    2
+    4 + @number * 2
   end
   
   def send_enemy
@@ -26,8 +26,12 @@ class Round
   
   def send_enemy_now?
     # Need to use a Timer!
-    @send_enemy_counter >= 120 && @send_enemy_counter = 0
-  end  
+    @send_enemy_counter >= time_per_enemy && @send_enemy_counter = 0
+  end
+  
+  def time_per_enemy
+    60 / @number + 15
+  end
   
   def all_enemies_sent?
     enemies_sent >= enemy_count
