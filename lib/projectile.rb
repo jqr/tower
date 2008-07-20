@@ -43,10 +43,14 @@ class Projectile
   end
   
   def check_for_hit
-    if (@x - @enemy.x) < 5 && (@y - @enemy.y) < 5
+    if Gosu::distance(@x, @y, @enemy.x, @enemy.y) < collision_size
       destroy
       @enemy.hit(self)
     end    
+  end
+  
+  def collision_size
+    @image.width
   end
 
   def destroy
