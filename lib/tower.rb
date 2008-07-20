@@ -70,8 +70,8 @@ class Tower
   end
 
   def place
-    x_pos = ((x + 3) / 32).floor * 32
-    y_pos = ((y + 3) / 32).floor * 32
+    x_pos = ((x + 3) / GameWindow::GRID_WIDTH).floor * GameWindow::GRID_WIDTH + GameWindow::GRID_WIDTH * 0.5 - @image.width / 2
+    y_pos = ((y + 3) / GameWindow::GRID_HEIGHT).floor * GameWindow::GRID_HEIGHT + GameWindow::GRID_HEIGHT * 0.5 - @image.height / 2
     [x_pos, y_pos]
   end
   
