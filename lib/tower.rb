@@ -12,7 +12,7 @@ class Tower
   end
   
   def update
-    @reload -= 1
+    @reload -= 1 if @reload >= 1
     if reloaded? && enemy = enemy_to_kill
       fire_projectile_at(enemy)
     end
@@ -27,14 +27,18 @@ class Tower
           0xffff0000
         end
       else
-        0xffffffff
+        0x00ffffff + (((1 - reload_percent * 0.75) * 255).to_i << 24)
       end
       
     @image.draw(x, y, 0, 1, 1, argb)
   end
   
+  def reload_percent
+    @reload.to_f / 100
+  end
+  
   def reloaded?
-    @reload < 0
+    @reload <= 0
   end
   
   def enemy_to_kill
