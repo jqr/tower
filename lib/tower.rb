@@ -22,7 +22,7 @@ class Tower
     argb = 
       if placing
         if can_place?
-          0x55ffffff
+          0xff00ff00
         else
           0xffff0000
         end
