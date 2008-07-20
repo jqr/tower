@@ -77,7 +77,8 @@ class Enemy
     @images = Gosu::Image::load_tiles(window, "enemy.bmp", 50, 50, false)
     @frame = 1
     @distance = 0
-    @x = @y = 0
+    @x = 150
+    @y = 0
   end
 
   def update
@@ -86,7 +87,7 @@ class Enemy
     
   def draw
     frame = (@distance * 0.2) % @images.size
-    @images[frame.to_i].draw(x, y, 0)
+    @images[frame.to_i].draw(x - 15, y - 15, 0)
   end
   
   def y
@@ -120,7 +121,7 @@ class GameWindow < Gosu::Window
       object.draw
     end
 
-    @font.draw("Prepare for craziness!", 230, 10, 0, 1.0, 1.0, 0xffffff00)
+    @font.draw("Enemies: #{@enemies.size}", 540, 10, 0, 1.0, 1.0, 0xffffff00)
   end
 
   def button_down(id)
@@ -133,7 +134,7 @@ class GameWindow < Gosu::Window
   end
   
   def setup_basic_towers
-    @towers << Tower.new(self, 100, 100)
+    @towers << Tower.new(self, 200, 100)
     @towers << Tower.new(self, 100, 300)
   end
   
