@@ -9,16 +9,22 @@ class Tower
     @image = Gosu::Image.new(window, "tower.png", false)
     @x = x
     @y = y
+    @reload = 0
   end
   
   def update
-    if enemy = enemy_to_kill
+    @reload -= 1
+    if reloaded? && enemy = enemy_to_kill
       fire_projectile_at(enemy)
     end
   end
 
   def draw
     @image.draw(x, y, 0)
+  end
+  
+  def reloaded?
+    @reload < 0
   end
   
   def enemy_to_kill
@@ -28,6 +34,7 @@ class Tower
   end
   
   def fire_projectile_at(enemy)
+    @reload = 100
     @window.projectiles << Projectile.new(@window, x, y, enemy)
   end
 end
