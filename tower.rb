@@ -4,11 +4,12 @@ require 'gosu'
 class Tower
   attr_accessor :x, :y
   
-  def initialize(window, x, y)
+  def initialize(window, x, y, radius)
     @window = window
     @image = Gosu::Image.new(window, "tower.png", false)
     @x = x
     @y = y
+    @radius = radius
     @reload = 0
   end
   
@@ -29,7 +30,9 @@ class Tower
   
   def enemy_to_kill
     if @window.enemies.size > 0
-      @window.enemies.first
+      @window.enemies.detect do |enemy|
+        Gosu::distance(@x, @y, enemy.x, enemy.y) < @radius
+      end
     end
   end
   
@@ -154,8 +157,8 @@ class GameWindow < Gosu::Window
   end
   
   def setup_basic_towers
-    @towers << Tower.new(self, 200, 100)
-    @towers << Tower.new(self, 100, 300)
+    @towers << Tower.new(self, 200, 100, 150)
+    @towers << Tower.new(self, 100, 300, 150)
   end
   
   def send_enemy
