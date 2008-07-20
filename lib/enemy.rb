@@ -1,4 +1,3 @@
-
 class Enemy
   attr_accessor :x, :y, :distance, :health
 

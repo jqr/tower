@@ -75,4 +75,8 @@ class Tower
   def cost
     100
   end
+  
+  def destroy
+    @window.remove_tower(self)
+  end
 end

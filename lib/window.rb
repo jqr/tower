@@ -130,6 +130,10 @@ class GameWindow < Gosu::Window
   def remove_projectile(projectile)
     @projectiles.delete(projectile)
   end
+
+  def remove_tower(tower)
+    @towers.delete(tower)
+  end
   
   def increment_enemies_exited
     @enemies_exited += 1
