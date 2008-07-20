@@ -4,14 +4,17 @@ require 'gosu'
 class Tower
   attr_accessor :x, :y
   
-  def initialize(window)
+  def initialize(window, x, y)
     @image = Gosu::Image.new(window, "tower.png", false)
+    @x = x
+    @y = y
   end
   
   def update
   end
 
   def draw
+    @image.draw(x, y, 0)
   end
 end
 
@@ -26,6 +29,7 @@ class Projectile
   end
 
   def draw
+    @image.draw(x, y, 0)
   end
 end
 
@@ -62,6 +66,8 @@ class GameWindow < Gosu::Window
     @projectiles = []
     @enemies = []
     @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
+    
+    setup_basic_towers
   end
 
   def update
@@ -85,6 +91,10 @@ class GameWindow < Gosu::Window
     when Gosu::Button::KbSpace
       send_enemy
     end
+  end
+  
+  def setup_basic_towers
+    @towers << Tower.new(self, 100, 300)
   end
   
   def send_enemy
