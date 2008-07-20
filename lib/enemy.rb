@@ -114,7 +114,7 @@ class Enemy
   end
   
   def exit_event
-    if @distance > 480
+    if @distance > @window.height
       @window.remove_enemy(self)
       @window.increment_enemies_exited
     end

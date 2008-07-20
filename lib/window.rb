@@ -5,10 +5,13 @@ require 'enemy'
 require 'round'
 
 class GameWindow < Gosu::Window
+  GRID_WIDTH = 32
+  GRID_HEIGHT = 32
+  
   attr_accessor :towers, :projectiles, :enemies, :credits
   
-  def initialize
-    super(640, 480, false)
+  def initialize(rows, columns)
+    super(rows * GRID_WIDTH, columns * GRID_HEIGHT, false)
     init_keyboard_constants
     self.caption = "Tower"
     @towers = []
@@ -20,6 +23,7 @@ class GameWindow < Gosu::Window
     @credits = 4000
     @potential_tower = Tower.new(self)
     @rounds = []
+    
     # setup_basic_towers
   end
 
@@ -41,22 +45,22 @@ class GameWindow < Gosu::Window
       object.draw
     end
 
-    @font.draw("Round: #{@rounds.size}", 540, 10, 0, 1.0, 1.0, 0xffffff00)
+    @font.draw("Round: #{@rounds.size}", width - 85, 10, 0, 1.0, 1.0, 0xffffff00)
     @font.draw("Moneys: #{@credits}", 10, 10, 0, 1.0, 1.0, 0xffffff00)
 
-    if @enemies_exited > 0
-      @font.draw("Enemies Exited: #{@enemies_exited}", 480, 450, 0, 1.0, 1.0, 0xffffff00)
-    end
+    # if @enemies_exited > 0
+      @font.draw("Enemies Exited: #{@enemies_exited}", width - 150, height - 30, 0, 1.0, 1.0, 0xffffff00)
+    # end
     
     if round_completed?
       text = 
         if @rounds.size > 0
-          "Round Finished, press N to start next round"
+          "Round Finished, press N"
         else
-          "Press the N to start the flood of enemies"
+          "Press the N to start"
         end
 
-      @font.draw(text, 120, 240, 0, 1.0, 1.0, 0xffffff00)
+      @font.draw(text, width / 2 - 80, height / 2, 0, 1.0, 1.0, 0xffffff00)
     end
     
     if @potential_tower
@@ -87,7 +91,7 @@ class GameWindow < Gosu::Window
   end
   
   def send_enemy
-    @enemies << Enemy.new(self, rand(590), 0)
+    @enemies << Enemy.new(self, rand(width - 50), 0)
   end
   
   def current_round
