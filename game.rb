@@ -38,7 +38,7 @@ class Tower
   
   def fire_projectile_at(enemy)
     @reload = 100
-    @window.add_projectile(Projectile.new(@window, x, y, 3, enemy))
+    @window.add_projectile(Projectile.new(@window, x - @image.width / 2, y - @image.height / 2, 3, enemy))
   end
   
   def cost
@@ -87,7 +87,7 @@ class Projectile
   end
   
   def check_for_hit
-    if (@x - @enemy.x) < 2 && (@y - @enemy.y) < 2
+    if (@x - @enemy.x) < 5 && (@y - @enemy.y) < 5
       @window.remove_projectile(self)
       @enemy.hit(self)
     end    
