@@ -108,13 +108,6 @@ class GameWindow < Gosu::Window
     end
   end
   
-  def setup_basic_towers
-    @towers << Tower.new(self, 200, 100, 150)
-    @towers << Tower.new(self, 100, 300, 150)
-    @towers << Tower.new(self, 400, 370, 150)
-    @towers << Tower.new(self, 500, 220, 150)
-  end
-
   def all_enemies_sent?
     current_round && current_round.all_enemies_sent? || !current_round
   end
