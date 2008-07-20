@@ -14,7 +14,7 @@ class Tower
   def update
     @reload -= 1 if @reload >= 1
     if reloaded? && enemy = enemy_to_kill
-      # fire_projectile_at(enemy)
+      fire_projectile_at(enemy)
     end
   end
 
