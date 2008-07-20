@@ -57,7 +57,7 @@ class GameWindow < Gosu::Window
       @potential_tower.x = mouse_x
       @potential_tower.y = mouse_y
       @potential_tower.place!
-      @potential_tower.draw(0.5)
+      @potential_tower.draw(true)
     end
     @cursor.draw(mouse_x, mouse_y, 0)
   end

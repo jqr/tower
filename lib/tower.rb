@@ -18,8 +18,19 @@ class Tower
     end
   end
 
-  def draw(opacity = 1)
-    @image.draw(x, y, 0, 1, 1, 0x00ffffff + ((opacity.to_f * 255).to_i << 24))
+  def draw(placing = false)
+    argb = 
+      if placing
+        if can_place?
+          0x55ffffff
+        else
+          0xffff0000
+        end
+      else
+        0xffffffff
+      end
+      
+    @image.draw(x, y, 0, 1, 1, argb)
   end
   
   def reloaded?
@@ -54,7 +65,7 @@ class Tower
   end
   
   def can_place?
-    !@window.towers.collect{|t| t.position}.include?(place)
+    !@window.towers.collect{ |t| t.position }.include?(place)
   end
   
   def cost
