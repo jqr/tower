@@ -88,8 +88,8 @@ class GameWindow < Gosu::Window
     @rounds.last
   end
     
-  def place_tower(m_x, m_y)
-    tower = Tower.new(self, m_x, m_y, 150)
+  def place_tower(x, y)
+    tower = Tower.new(self, x, y, 150)
     if @credits >= tower.cost && tower.can_place?
       @credits = @credits - tower.cost
       @towers << tower
