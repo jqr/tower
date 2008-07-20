@@ -165,8 +165,8 @@ class GameWindow < Gosu::Window
       object.draw
     end
 
-    @font.draw("Enemies: #{@enemies.size}", 540, 10, 0, 1.0, 1.0, 0xffffff00)
-    @font.draw("Enemies Exited: #{@enemies_exited}", 240, 10, 0, 1.0, 1.0, 0xffffff00)
+    # @font.draw("Enemies: #{@enemies.size}", 540, 10, 0, 1.0, 1.0, 0xffffff00)
+    @font.draw("Enemies Exited: #{@enemies_exited}", 480, 10, 0, 1.0, 1.0, 0xffffff00)
     
     @cursor.draw(mouse_x, mouse_y, 0)
   end
