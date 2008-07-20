@@ -1,0 +1,76 @@
+From 2fb95d314ed6015a5a21bc415b5831db386df383 Mon Sep 17 00:00:00 2001
+From: kris <kristopher.chambers@gmail.com>
+Date: Sat, 19 Jul 2008 23:53:33 -0400
+Subject: Moneys!!
+
+---
+ tower.rb |   18 ++++++++++++++++--
+ 1 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/tower.rb b/tower.rb
+index 9ee7dacea593e1d51ad6247b23dcd18848fef7f6..6b93bf6a835b0213273c3d53133465e1301fc958 100644
+--- a/tower.rb
++++ b/tower.rb
+@@ -40,6 +40,10 @@ class Tower
+     @reload = 100
+     @window.add_projectile(Projectile.new(@window, x, y, 3, enemy))
+   end
++  
++  def cost
++    100
++  end
+ end
+ 
+ class Projectile
+@@ -137,6 +141,10 @@ class Enemy
+       @window.increment_enemies_exited
+     end
+   end
++  
++  def credit_value
++    10
++  end
+ end
+ 
+ class GameWindow < Gosu::Window
+@@ -151,6 +159,7 @@ class GameWindow < Gosu::Window
+     @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
+     @enemies_exited = 0
+     @cursor = Gosu::Image.new(self, "images/cursor.png", false)
++    @credits = 500
+     setup_basic_towers
+   end
+ 
+@@ -167,7 +176,7 @@ class GameWindow < Gosu::Window
+ 
+     @font.draw("Enemies: #{@enemies.size}", 540, 10, 0, 1.0, 1.0, 0xffffff00)
+     @font.draw("Enemies Exited: #{@enemies_exited}", 240, 10, 0, 1.0, 1.0, 0xffffff00)
+-    
++    @font.draw("Moneys: #{@credits}", 100, 10, 0, 1.0, 1.0, 0xffffff00)
+     @cursor.draw(mouse_x, mouse_y, 0)
+   end
+ 
+@@ -183,7 +192,11 @@ class GameWindow < Gosu::Window
+   end
+   
+   def place_tower(m_x, m_y)
+-    @towers << Tower.new(self, m_x, m_y, 150)
++    tower = Tower.new(self, m_x, m_y, 150)
++    if @credits >= tower.cost
++      @credits = @credits - tower.cost
++      @towers << tower
++    end
+   end
+   
+   def setup_basic_towers
+@@ -203,6 +216,7 @@ class GameWindow < Gosu::Window
+     
+   def remove_enemy(enemy)
+     @enemies.delete(enemy)
++    @credits += enemy.credit_value
+   end
+   
+   def remove_projectile(projectile)
+-- 
+1.5.5.1
+
