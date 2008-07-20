@@ -9,6 +9,7 @@ class Enemy
     @x = x
     @y = y
     @health = 100
+    @previous_heading = :down
   end
 
   def update
@@ -28,15 +29,20 @@ class Enemy
   end
   
   def heading
-    case true
-      when can_move_down?
-        :down
-      when can_move_left?
-        :left
-      when can_move_right?
-        :right
-      when can_move_up?
-        :up
+    if send("can_move_#{@previous_heading}?")
+      @previous_heading
+    else
+      @previous_heading =
+        case true
+          when can_move_down?
+            :down
+          when can_move_left?
+            :left
+          when can_move_right?
+            :right
+          when can_move_up?
+            :up
+        end
     end
   end  
   
@@ -52,11 +58,17 @@ class Enemy
   end
   
   def can_move_left?
-    true
+    move_x, move_y = x - 20, y
+    !@window.towers.detect do |tower|
+      tower.collide_with?(move_x, move_y, 50)
+    end
   end
   
   def can_move_right?
-    true
+    move_x, move_y = x + 20, y
+    !@window.towers.detect do |tower|
+      tower.collide_with?(move_x, move_y, 50)
+    end
   end
   
   def next_move(direction)

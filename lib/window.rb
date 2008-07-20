@@ -17,7 +17,7 @@ class GameWindow < Gosu::Window
     @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
     @enemies_exited = 0
     @cursor = Gosu::Image.new(self, "images/cursor.png", false)
-    @credits = 400
+    @credits = 4000
     @potential_tower = Tower.new(self)
     @rounds = []
     # setup_basic_towers
@@ -87,7 +87,7 @@ class GameWindow < Gosu::Window
   end
   
   def send_enemy
-    @enemies << Enemy.new(self, rand(640), 0)
+    @enemies << Enemy.new(self, rand(590), 0)
   end
   
   def current_round
