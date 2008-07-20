@@ -150,6 +150,7 @@ class GameWindow < Gosu::Window
     @enemies = []
     @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
     @enemies_exited = 0
+    @cursor = Gosu::Image.new(self, "images/cursor.png", false)
     setup_basic_towers
   end
 
@@ -166,6 +167,8 @@ class GameWindow < Gosu::Window
 
     @font.draw("Enemies: #{@enemies.size}", 540, 10, 0, 1.0, 1.0, 0xffffff00)
     @font.draw("Enemies Exited: #{@enemies_exited}", 240, 10, 0, 1.0, 1.0, 0xffffff00)
+    
+    @cursor.draw(mouse_x, mouse_y, 0)
   end
 
   def button_down(id)
