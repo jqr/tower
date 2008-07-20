@@ -142,4 +142,8 @@ class GameWindow < Gosu::Window
   def font
     @font
   end
+
+  def wall_time
+    Gosu::milliseconds
+  end
 end

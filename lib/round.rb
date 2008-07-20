@@ -18,6 +18,7 @@ class Round
   def send_enemy
     if send_enemy_now?
       @send_enemy.call
+      @last_enemy_sent_at = @window.wall_time
       self.enemies_sent += 1
       end! if all_enemies_sent?
     end
@@ -25,12 +26,18 @@ class Round
   end
   
   def send_enemy_now?
-    # Need to use a Timer!
-    @send_enemy_counter >= time_per_enemy && @send_enemy_counter = 0
+    @window.wall_time - @last_enemy_sent_at.to_i >= time_per_enemy && @send_enemy_counter = 0
   end
   
   def time_per_enemy
-    60 / @number + 15
+    extra = 
+      if @number < 10
+        (10 - @number)
+      else
+        0
+      end
+      
+    200 + extra * 150
   end
   
   def all_enemies_sent?
@@ -38,19 +45,19 @@ class Round
   end
   
   def start!
-    @started = true
+    @started = @window.wall_time
   end
 
   def started?
-    @started == true
+    @started
   end
   
   def end!
-    @ended = true if started?
+    @ended = @window.wall_time if started?
   end
   
   def ended?
-    @ended == true
+    @ended
   end
   
   def running?
