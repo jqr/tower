@@ -88,9 +88,13 @@ class Projectile
   
   def check_for_hit
     if (@x - @enemy.x) < 5 && (@y - @enemy.y) < 5
-      @window.remove_projectile(self)
+      destroy
       @enemy.hit(self)
     end    
+  end
+
+  def destroy
+    @window.remove_projectile(self)
   end
 end
 
