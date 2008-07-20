@@ -7,6 +7,7 @@ require 'round'
 class GameWindow < Gosu::Window
   GRID_WIDTH = 32
   GRID_HEIGHT = 32
+  GRID_COLOR = 0x5500ff00
   
   attr_accessor :towers, :projectiles, :enemies, :credits
   
@@ -14,6 +15,9 @@ class GameWindow < Gosu::Window
     super(rows * GRID_WIDTH, columns * GRID_HEIGHT, false)
     init_keyboard_constants
     self.caption = "Tower"
+
+    @grid_rows = rows
+    @grid_columns = columns
     @towers = []
     @projectiles = []
     @enemies = []
@@ -39,8 +43,19 @@ class GameWindow < Gosu::Window
     end
     current_round.send_enemy if current_round && current_round.send_enemy_now?
   end
+  
+  def draw_grid
+    @grid_rows.times do |distance|
+      draw_line(0, GRID_HEIGHT * distance, GRID_COLOR, width, GRID_HEIGHT * distance, GRID_COLOR)
+    end
+    @grid_columns.times do |distance|
+      draw_line(GRID_WIDTH * distance, 0, GRID_COLOR, GRID_WIDTH * distance, height, GRID_COLOR)
+    end
+  end
 
   def draw
+    draw_grid
+    
     (@towers + @enemies + @projectiles).reverse.each do |object|
       object.draw
     end
