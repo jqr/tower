@@ -150,7 +150,8 @@ class GameWindow < Gosu::Window
   
   def add_projectile(projectile)
     self.projectiles << projectile
-
+  end
+    
   def remove_enemy(enemy)
     @enemies.delete(enemy)
   end
