@@ -174,7 +174,13 @@ class GameWindow < Gosu::Window
       close
     when Gosu::Button::KbSpace
       send_enemy
+    when Gosu::Button::MsLeft
+      place_tower(mouse_x, mouse_y)
     end
+  end
+  
+  def place_tower(m_x, m_y)
+    @towers << Tower.new(self, m_x, m_y, 150)
   end
   
   def setup_basic_towers
