@@ -51,21 +51,21 @@ class Projectile
   end
   
   def update
-    @x += track(@enemy.x, x) * @speed
-    @y += track(@enemy.y, y) * @speed
+    @x += track(@enemy.x, x, @speed)
+    @y += track(@enemy.y, y, @speed)
   end
 
   def draw
     @image.draw(x, y, 0)
   end
   
-  def track(tracking, current)
+  def track(tracking, current, speed)
     if tracking == current
       0
     elsif tracking > current
-      1
+      [speed, (tracking - current)].min
     else
-      -1
+      -[speed, (current - tracking)].min
     end
   end
 end
