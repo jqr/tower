@@ -1,0 +1,62 @@
+From b069c4e772bf8eaf2657fd1dffe805652a14502c Mon Sep 17 00:00:00 2001
+From: kris <kristopher.chambers@gmail.com>
+Date: Sat, 19 Jul 2008 22:42:51 -0400
+Subject: Enemies exited count.
+
+---
+ tower.rb |   11 ++++++++---
+ 1 files changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/tower.rb b/tower.rb
+index 8c552355dae2cf1f49d63bd94e283dd9445ed199..698794d8d32c748dab7dff0c1b989a966d8ce150 100644
+--- a/tower.rb
++++ b/tower.rb
+@@ -75,8 +75,7 @@ class Projectile
+     if @x == @enemy.x && @y == @enemy.y
+       @window.remove_enemy(@enemy)
+       @window.remove_projectile(self)
+-    end
+-    
++    end    
+     if !@window.enemies.include?(@enemy)
+       @window.remove_projectile(self)
+     end
+@@ -112,6 +111,7 @@ class Enemy
+   def exit_event
+     if @distance > 480
+       @window.remove_enemy(self)
++      @window.increment_enemies_exited
+     end
+   end
+ end
+@@ -126,7 +126,7 @@ class GameWindow < Gosu::Window
+     @projectiles = []
+     @enemies = []
+     @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
+-    
++    @enemies_exited = 0
+     setup_basic_towers
+   end
+ 
+@@ -142,6 +142,7 @@ class GameWindow < Gosu::Window
+     end
+ 
+     @font.draw("Enemies: #{@enemies.size}", 540, 10, 0, 1.0, 1.0, 0xffffff00)
++    @font.draw("Enemies Exited: #{@enemies_exited}", 240, 10, 0, 1.0, 1.0, 0xffffff00)
+   end
+ 
+   def button_down(id)
+@@ -173,6 +174,10 @@ class GameWindow < Gosu::Window
+   def remove_projectile(projectile)
+     @projectiles.delete(projectile)
+   end
++  
++  def increment_enemies_exited
++    @enemies_exited += 1
++  end
+ end
+ 
+ window = GameWindow.new
+-- 
+1.5.5.1
+

@@ -79,11 +79,7 @@ class Projectile
     if @x == @enemy.x && @y == @enemy.y
       @window.remove_projectile(self)
       @enemy.hit(self)
-    end
-    
-    if !@window.enemies.include?(@enemy)
-      @window.remove_projectile(self)
-    end
+    end    
   end
 end
 
@@ -126,6 +122,7 @@ class Enemy
   def exit_event
     if @distance > 480
       @window.remove_enemy(self)
+      @window.increment_enemies_exited
     end
   end
 end
@@ -140,7 +137,7 @@ class GameWindow < Gosu::Window
     @projectiles = []
     @enemies = []
     @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
-    
+    @enemies_exited = 0
     setup_basic_towers
   end
 
@@ -156,6 +153,7 @@ class GameWindow < Gosu::Window
     end
 
     @font.draw("Enemies: #{@enemies.size}", 540, 10, 0, 1.0, 1.0, 0xffffff00)
+    @font.draw("Enemies Exited: #{@enemies_exited}", 240, 10, 0, 1.0, 1.0, 0xffffff00)
   end
 
   def button_down(id)
@@ -186,6 +184,10 @@ class GameWindow < Gosu::Window
   
   def remove_projectile(projectile)
     @projectiles.delete(projectile)
+  end
+  
+  def increment_enemies_exited
+    @enemies_exited += 1
   end
 end
 
