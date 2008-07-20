@@ -158,7 +158,7 @@ class Round
   end
   
   def enemy_count
-    20
+    2
   end
 end
 
@@ -180,7 +180,6 @@ class GameWindow < Gosu::Window
     @rounds = []
     @send_enemy_counter = 0
     # setup_basic_towers
-    start_round
   end
 
   def update
@@ -188,7 +187,7 @@ class GameWindow < Gosu::Window
       object.update
     end
     @send_enemy_counter += 1
-    send_enemy
+    send_enemy if round_started?
   end
 
   def draw
@@ -199,7 +198,18 @@ class GameWindow < Gosu::Window
     # @font.draw("Enemies: #{@enemies.size}", 540, 10, 0, 1.0, 1.0, 0xffffff00)
     @font.draw("Enemies Exited: #{@enemies_exited}", 480, 10, 0, 1.0, 1.0, 0xffffff00)
     @font.draw("Moneys: #{@credits}", 100, 10, 0, 1.0, 1.0, 0xffffff00)
-    @font.draw("Round Finished", 240, 240, 0, 1.0, 1.0, 0xffffff00) if round_completed? && @enemies.empty?
+    
+    if round_completed?
+      text = 
+        if @rounds.size > 0
+          "Round Finished, press space to start next round"
+        else
+          "Press the space bar to start the flood of enemies"
+        end
+
+      @font.draw(text, 120, 240, 0, 1.0, 1.0, 0xffffff00)
+    end
+    
     if @potential_tower
       @potential_tower.x = mouse_x
       @potential_tower.y = mouse_y
@@ -213,14 +223,20 @@ class GameWindow < Gosu::Window
     when Gosu::Button::KbEscape
       close
     when Gosu::Button::KbSpace
-      start_round
+      start_round if round_completed?
     when Gosu::Button::MsLeft
       place_tower(mouse_x, mouse_y)
     end
   end
   
   def start_round
+    puts "starting round"
+    @enemies_sent_this_round = 0
     @rounds << Round.new(self, @rounds.size + 1)
+  end
+  
+  def round_started?
+    @rounds.size > 0 && !round_completed?
   end
 
   def current_round
@@ -241,9 +257,13 @@ class GameWindow < Gosu::Window
     @towers << Tower.new(self, 400, 370, 150)
     @towers << Tower.new(self, 500, 220, 150)
   end
+
+  def all_enemies_sent?
+    current_round && @enemies_sent_this_round >= current_round.enemy_count || !current_round
+  end
   
   def round_completed?
-    @enemies_sent_this_round == current_round.enemy_count
+    all_enemies_sent? && @enemies.size == 0
   end
   
   def increment_enemies_sent_this_round
