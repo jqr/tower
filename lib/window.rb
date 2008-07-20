@@ -71,9 +71,8 @@ class GameWindow < Gosu::Window
   end
   
   def start_round
-    puts "starting round"
-    @enemies_sent_this_round = 0
     @rounds << Round.new(self, @rounds.size + 1)
+    current_round.start
   end
   
   def round_started?
@@ -100,7 +99,7 @@ class GameWindow < Gosu::Window
   end
 
   def all_enemies_sent?
-    current_round && @enemies_sent_this_round >= current_round.enemy_count || !current_round
+    current_round && current_round.all_enemies_sent? || !current_round
   end
   
   def round_completed?
@@ -108,11 +107,11 @@ class GameWindow < Gosu::Window
   end
   
   def increment_enemies_sent_this_round
-    @enemies_sent_this_round += 1
+    current_round.enemy_sent
   end
   
   def send_enemy
-    while send_enemy_now? && @enemies_sent_this_round < current_round.enemy_count
+    while send_enemy_now? && !current_round.all_enemies_sent?
       @enemies << Enemy.new(self, rand(640), 0)
       increment_enemies_sent_this_round
     end
