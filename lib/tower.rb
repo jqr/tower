@@ -8,7 +8,7 @@ class Tower
     @y = y
     @radius = radius
     @reload = 0
-    place
+    place!
   end
   
   def update
@@ -40,8 +40,21 @@ class Tower
   end
 
   def place
-    self.x = (x / 32).floor * 32
-    self.y = (y / 32).floor * 32
+    x_pos = (x / 32).floor * 32
+    y_pos = (y / 32).floor * 32
+    [x_pos, y_pos]
+  end
+  
+  def place!
+    self.x, self.y = place
+  end  
+  
+  def position
+    [x,y]
+  end
+  
+  def can_place?
+    !@window.towers.collect{|t| t.position}.include?(place)
   end
   
   def cost

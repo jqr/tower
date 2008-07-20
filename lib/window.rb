@@ -56,7 +56,7 @@ class GameWindow < Gosu::Window
     if @potential_tower
       @potential_tower.x = mouse_x
       @potential_tower.y = mouse_y
-      @potential_tower.place
+      @potential_tower.place!
       @potential_tower.draw(0.5)
     end
     @cursor.draw(mouse_x, mouse_y, 0)
@@ -90,7 +90,7 @@ class GameWindow < Gosu::Window
     
   def place_tower(m_x, m_y)
     tower = Tower.new(self, m_x, m_y, 150)
-    if @credits >= tower.cost
+    if @credits >= tower.cost && tower.can_place?
       @credits = @credits - tower.cost
       @towers << tower
     end
