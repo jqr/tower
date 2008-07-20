@@ -61,11 +61,11 @@ class Tower
   end  
   
   def position
-    [x,y]
+    [x, y]
   end
   
   def can_place?
-    !@window.towers.collect{ |t| t.position }.include?(place)
+    @window.credits >= cost && !@window.towers.collect{ |t| t.position }.include?(place)
   end
   
   def cost

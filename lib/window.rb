@@ -4,7 +4,7 @@ require 'enemy'
 require 'round'
 
 class GameWindow < Gosu::Window
-  attr_accessor :towers, :projectiles, :enemies
+  attr_accessor :towers, :projectiles, :enemies, :credits
   
   def initialize
     super(640, 480, false)
@@ -90,7 +90,7 @@ class GameWindow < Gosu::Window
     
   def place_tower(x, y)
     tower = Tower.new(self, x, y, 150)
-    if @credits >= tower.cost && tower.can_place?
+    if tower.can_place?
       @credits = @credits - tower.cost
       @towers << tower
     end
