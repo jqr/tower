@@ -111,6 +111,10 @@ class Enemy
   def draw
     frame = (@distance * 0.2) % @images.size
     @images[frame.to_i].draw(x - 15, y - 15, 0)
+    # draw_health
+  end
+  
+  def draw_health
     Gosu::Font.new(@window, Gosu::default_font_name, 15).draw(@health.to_s, x , y - 30, 0, 1.0, 1.0, 0xffffff00)
   end
   
