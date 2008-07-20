@@ -35,7 +35,7 @@ class Tower
   
   def fire_projectile_at(enemy)
     @reload = 100
-    @window.projectiles << Projectile.new(@window, x, y, 3, enemy)
+    @window.add_projectile(Projectile.new(@window, x, y, 3, enemy))
   end
 end
 
@@ -139,6 +139,10 @@ class GameWindow < Gosu::Window
   
   def send_enemy
     @enemies << Enemy.new(self)
+  end
+  
+  def add_projectile(projectile)
+    self.projectiles << projectile
   end
 end
 
