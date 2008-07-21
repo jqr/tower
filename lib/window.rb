@@ -7,7 +7,7 @@ require 'round'
 class GameWindow < Gosu::Window
   GRID_WIDTH = 32
   GRID_HEIGHT = 32
-  GRID_COLOR = 0x6600ff00
+  GRID_COLOR = 0x1100ff00
   
   attr_accessor :towers, :projectiles, :enemies, :credits
   
@@ -56,34 +56,20 @@ class GameWindow < Gosu::Window
     @grid_columns.times do |x|
       @grid[x][@grid_rows - 1] ||= 1
     end
-
-    10.times do
+    
+    30.times do
       @grid.each_with_index do |column, x|
         column.each_with_index do |cell, y|
           unless cell.is_a?(Tower)
-            surrounding_distances = [cell]
-            if x > 0
-              surrounding_distances << @grid[x - 1][y]
-            end
-
-            if x + 1 < @grid_columns
-              surrounding_distances << @grid[x + 1][y]
-            end
-
-            if y > 0
-              surrounding_distances << @grid[x][y - 1]
-            end
-
-            if y + 1 < @grid_rows
-              surrounding_distances << @grid[x][y + 1]
-            end
-          
-            surrounding_distances = surrounding_distances.select do |value|
+            distances = surrounding_cells(x, y).select do |value|
               value.is_a?(Integer)
             end
           
-            if surrounding_distances.size > 0
-              min_distance = surrounding_distances.min
+            distances += [cell]
+            distances.compact!
+            
+            if distances.size > 0
+              min_distance = distances.min
               if @grid[x][y] == nil || min_distance + 1 < @grid[x][y]
                 @grid[x][y] = min_distance + 1
               end
@@ -92,6 +78,27 @@ class GameWindow < Gosu::Window
         end
       end
     end
+  end
+  
+  def surrounding_cells(x, y)
+    distances = []
+    if y + 1 < @grid_rows
+      distances << @grid[x][y + 1]
+    end
+
+    if x > 0
+      distances << @grid[x - 1][y]
+    end
+
+    if x + 1 < @grid_columns
+      distances << @grid[x + 1][y]
+    end
+
+    if y > 0
+      distances << @grid[x][y - 1]
+    end
+    
+    distances
   end
   
   def draw_grid
@@ -121,9 +128,9 @@ class GameWindow < Gosu::Window
     @font.draw("Round: #{@rounds.size}", width - 85, 10, 0, 1.0, 1.0, 0xffffff00)
     @font.draw("Moneys: #{@credits}", 10, 10, 0, 1.0, 1.0, 0xffffff00)
 
-    # if @enemies_exited > 0
+    if @enemies_exited > 0
       @font.draw("Enemies Exited: #{@enemies_exited}", width - 150, height - 30, 0, 1.0, 1.0, 0xffffff00)
-    # end
+    end
     
     if round_completed?
       text = 
@@ -164,7 +171,7 @@ class GameWindow < Gosu::Window
   end
   
   def send_enemy
-    @enemies << Enemy.new(self, rand(width - 50), 0)
+    @enemies << Enemy.new(self, rand((@grid_columns - 2) * GRID_WIDTH) + GRID_WIDTH, 0)
   end
   
   def current_round

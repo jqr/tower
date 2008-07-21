@@ -7,8 +7,9 @@ class Projectile
     @y = y
     @speed = speed
     @window = window
-    @damage = 45 + rand(10)
+    @damage = rand(10)
     attacking(enemy)
+    @size = 0.5
   end
   
   def update
@@ -17,7 +18,7 @@ class Projectile
   end
 
   def draw
-    @image.draw(x, y, 0, 1, 1, color)
+    @image.draw(x, y, 0, @size, @size, color)
   end
   
   def color

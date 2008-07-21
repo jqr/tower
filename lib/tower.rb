@@ -32,7 +32,7 @@ class Tower
       
     @image.draw(x, y, 0, 1, 1, argb)
     if enemy = enemy_to_kill
-      @window.draw_line(center_x, center_y, 0xffff0000, enemy.center_x, enemy.center_y, 0xffff0000)
+      @window.draw_line(center_x, center_y, 0x44ff0000, enemy.center_x, enemy.center_y, 0x44ff0000)
     end
   end
   
@@ -62,11 +62,7 @@ class Tower
   
   def fire_projectile_at(enemy)
     @reload = 100
-    if rand(100) > 50
-      @window.add_projectile(Projectile.new(@window, x, y, 3, enemy))
-    else
-      @window.add_projectile(ExplosiveProjectile.new(@window, x, y, 3, enemy))
-    end
+    @window.add_projectile(Projectile.new(@window, x, y, 3, enemy))
   end
 
   def place
