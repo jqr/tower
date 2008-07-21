@@ -7,7 +7,7 @@ require 'round'
 class GameWindow < Gosu::Window
   GRID_WIDTH = 32
   GRID_HEIGHT = 32
-  GRID_COLOR = 0x3300ff00
+  GRID_COLOR = 0x6600ff00
   
   attr_accessor :towers, :projectiles, :enemies, :credits
   
@@ -49,7 +49,48 @@ class GameWindow < Gosu::Window
   def recalculate_grid
     @grid.each_with_index do |column, x|
       column.each_with_index do |cell, y|
-        @grid[x][y] = rand(10)
+        @grid[x][y] = nil if @grid[x][y].is_a?(Integer)
+      end
+    end
+    
+    @grid_columns.times do |x|
+      @grid[x][@grid_rows - 1] ||= 1
+    end
+
+    10.times do
+      @grid.each_with_index do |column, x|
+        column.each_with_index do |cell, y|
+          unless cell.is_a?(Tower)
+            surrounding_distances = [cell]
+            if x > 0
+              surrounding_distances << @grid[x - 1][y]
+            end
+
+            if x + 1 < @grid_columns
+              surrounding_distances << @grid[x + 1][y]
+            end
+
+            if y > 0
+              surrounding_distances << @grid[x][y - 1]
+            end
+
+            if y + 1 < @grid_rows
+              surrounding_distances << @grid[x][y + 1]
+            end
+          
+            surrounding_distances = surrounding_distances.select do |value|
+              value.is_a?(Integer)
+            end
+          
+            if surrounding_distances.size > 0
+              min_distance = surrounding_distances.min
+              if @grid[x][y] == nil || min_distance + 1 < @grid[x][y]
+                @grid[x][y] = min_distance + 1
+                puts "#{x}, #{y} = #{@grid[x][y]} ... #{surrounding_distances.inspect}"
+              end
+            end
+          end
+        end
       end
     end
   end
@@ -64,7 +105,9 @@ class GameWindow < Gosu::Window
     
     @grid.each_with_index do |column, x|
       column.each_with_index do |cell, y|
-        @font.draw(cell, x * GRID_WIDTH + 9, y * GRID_HEIGHT + 9, 0, 1.0, 1.0, GRID_COLOR)
+        unless cell.is_a?(Tower)
+          @font.draw(cell, x * GRID_WIDTH + 9, y * GRID_HEIGHT + 9, 0, 1.0, 1.0, GRID_COLOR)
+        end
       end
     end
   end
@@ -134,6 +177,8 @@ class GameWindow < Gosu::Window
     if tower.can_place?
       @credits = @credits - tower.cost
       @towers << tower
+      @grid[tower.grid_x][tower.grid_y] = tower
+      recalculate_grid
     end
   end
   

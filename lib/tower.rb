@@ -1,5 +1,5 @@
 class Tower
-  attr_accessor :x, :y
+  attr_accessor :x, :y, :grid_x, :grid_y
   
   def initialize(window, x = 0, y = 0, radius = 0)
     @window = window
@@ -70,8 +70,10 @@ class Tower
   end
 
   def place
-    x_pos = ((x + 3) / GameWindow::GRID_WIDTH).floor * GameWindow::GRID_WIDTH + GameWindow::GRID_WIDTH * 0.5 - @image.width / 2
-    y_pos = ((y + 3) / GameWindow::GRID_HEIGHT).floor * GameWindow::GRID_HEIGHT + GameWindow::GRID_HEIGHT * 0.5 - @image.height / 2
+    @grid_x = (x + 3) / GameWindow::GRID_WIDTH
+    @grid_y = (y + 3) / GameWindow::GRID_HEIGHT
+    x_pos = (@grid_x).floor * GameWindow::GRID_WIDTH + GameWindow::GRID_WIDTH * 0.5 - @image.width / 2
+    y_pos = (@grid_y).floor * GameWindow::GRID_HEIGHT + GameWindow::GRID_HEIGHT * 0.5 - @image.height / 2
     [x_pos, y_pos]
   end
   
