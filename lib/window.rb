@@ -86,7 +86,6 @@ class GameWindow < Gosu::Window
               min_distance = surrounding_distances.min
               if @grid[x][y] == nil || min_distance + 1 < @grid[x][y]
                 @grid[x][y] = min_distance + 1
-                puts "#{x}, #{y} = #{@grid[x][y]} ... #{surrounding_distances.inspect}"
               end
             end
           end
