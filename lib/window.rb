@@ -7,7 +7,7 @@ require 'round'
 class GameWindow < Gosu::Window
   GRID_WIDTH = 32
   GRID_HEIGHT = 32
-  GRID_COLOR = 0x1100ff00
+  GRID_COLOR = 0x5500ff00
   
   attr_accessor :towers, :projectiles, :enemies, :credits
   

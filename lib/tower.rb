@@ -29,8 +29,13 @@ class Tower
       else
         0x00ffffff + (((1 - reload_percent * 0.75) * 255).to_i << 24)
       end
-      
+
     @image.draw(x, y, 0, 1, 1, argb)
+
+    draw_sight
+  end
+  
+  def draw_sight
     if enemy = enemy_to_kill
       @window.draw_line(center_x, center_y, 0x44ff0000, enemy.center_x, enemy.center_y, 0x44ff0000)
     end
