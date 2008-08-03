@@ -22,8 +22,7 @@ class Enemy
     
   def draw
     @frame += 1
-    @image.draw_rot(x, y, 0, (@frame / 10) % 2 * - 30 + 35, 0.5, 0.5)
-    # @image.draw(x, y, 0, 1, 1, 0xffffff00 + (health.to_f / 100 * 255).to_i)
+    @image.draw_rot(x + @image.width / 2, y + @image.height / 2, 0, (@frame / 10) % 2 * - 30 + 35, 0.5, 0.5)
     # draw_health
   end
   
