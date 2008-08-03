@@ -1,4 +1,6 @@
 class Enemy
+  include Drawable
+  
   attr_accessor :x, :y, :distance, :health
 
   def initialize(window, x, y)
@@ -24,6 +26,8 @@ class Enemy
     @frame += 1
     @image.draw_rot(x + @image.width / 2, y + @image.height / 2, 0, (@frame / 10) % 2 * - 30 + 35, 0.5, 0.5)
     # draw_health
+    draw_center_lines
+    highlight_grid
   end
   
   def draw_health

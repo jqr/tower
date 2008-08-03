@@ -1,3 +1,4 @@
+require 'drawable'
 require 'tower'
 require 'projectile'
 require 'explosive_projectile'
