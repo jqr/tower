@@ -1,10 +1,10 @@
 class Enemy
   include Drawable
   
-  attr_accessor :x, :y, :distance, :health
+  attr_accessor :x, :y, :distance, :health, :image
 
   def initialize(window, x, y)
-    @image = Gosu::Image.new(window, "images/enemy.png", false)
+    self.image = Gosu::Image.new(window, "images/enemy.png", false)
     @window = window
     @frame = 1
     @distance = 0
@@ -28,18 +28,11 @@ class Enemy
     # draw_health
     draw_center_lines
     
+    highlight_tile
   end
   
   def draw_health
     @font.draw(@health.to_s, x - 8, y - 23, 0, 1, 1, 0xffffff00)
-  end
-  
-  def center_x
-    x + @image.width / 2
-  end  
-
-  def center_y
-    y + @image.height / 2
   end
   
   def move!
