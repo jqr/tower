@@ -96,7 +96,7 @@ class GameWindow < Gosu::Window
   end
   
   def send_enemy
-    @enemies << Enemy.new(self, rand(@board.width), 0)
+    @enemies << Enemy.new(self, rand(@board.width - @board.tile_size * 2) + @board.tile_size, 0)
   end
   
   def current_round
