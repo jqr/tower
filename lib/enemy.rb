@@ -1,25 +1,28 @@
 class Enemy
   include Drawable
   
-  attr_accessor :x, :y, :distance, :health, :image
+  attr_accessor :x, :y, :health, :image, :heading
 
   def initialize(window, x, y)
     self.image = Gosu::Image.new(window, "images/enemy.png", false)
     @window = window
     @frame = 1
-    @distance = 0
-    @x = x
-    @y = y
+    self.x = x
+    self.y = y
     @health = 100
     @previous_heading = :down
     @font = Gosu::Font.new(@window, Gosu::default_font_name, 15)
     @frame = 0
+    calculate_heading
   end
 
   def update
     exit_event
-    @distance += 1
+    current_tile = @window.board.snap(x, y)
     move!
+    if @window.board.snap(x, y) != current_tile
+      @new_tile = true
+    end
   end
     
   def draw
@@ -36,34 +39,44 @@ class Enemy
   end
   
   def move!
+    calculate_heading if recalculate_heading?
+
     self.x, self.y = next_move(heading)
   end
   
-  def heading
-    cells = @window.board.surrounding_cells(board_x, board_y)
+  def recalculate_heading?
+    @new_tile == true && @window.board.inside_tile?(x, y, image.width / 2)
+  end
+  
+  def calculate_heading
+    @new_tile = false
+    
+    cells = @window.board.surrounding_cells(board_x, board_y(- 11))
     min_distance = cells.select { |c| c.is_a?(Integer) }.min
-    case cells.index(min_distance)
-      when 0:
-        :down
-      when 1:
-        :left
-      when 2: 
-        :right
-      when 3:
-        :down
-    end
+    
+    self.heading = 
+      case cells.index(min_distance)
+        when 0:
+          :down
+        when 1:
+          :left
+        when 2: 
+          :right
+        when 3:
+          :up
+      end
   end
   
   def next_move(direction)
     case direction
       when :down
-        [@x, @y + speed]
+        [x, y + speed]
       when :up
-        [@x, @y - speed]
+        [x, y - speed]
       when :left
-        [@x - speed, @y]
+        [x - speed, y]
       when :right
-        [@x + speed, @y]
+        [x + speed, y]
     end
   end
   

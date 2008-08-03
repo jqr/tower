@@ -24,11 +24,11 @@ module Drawable
     )
   end
   
-  def board_x
-    ((center_x + 3) / @window.board.tile_size).to_i
+  def board_x(delta = 0)
+    ((center_x + delta) / @window.board.tile_size).to_i
   end
   
-  def board_y
-    ((center_y + 3) / @window.board.tile_size).to_i
+  def board_y(delta = 0)
+    ((center_y + delta) / @window.board.tile_size).to_i
   end
 end

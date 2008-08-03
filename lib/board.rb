@@ -73,6 +73,11 @@ class Board
     distances
   end
   
+  def inside_tile?(x, y, radius)
+    x, y = snap(x, y)
+    x * tile_size
+  end
+  
   def draw(color)
     columns.times do |distance|
       @window.draw_line(tile_size * distance, 0, color, tile_size * distance, @window.height, color)
