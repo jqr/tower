@@ -7,10 +7,10 @@ module Drawable
   def highlight_grid
     color = 0xaa00ff00
     @window.draw_quad(
-      (grid_x + 1) * GameWindow::GRID_WIDTH, grid_y * GameWindow::GRID_HEIGHT, color,
-      (grid_x + 1) * GameWindow::GRID_WIDTH, (grid_y + 1) * GameWindow::GRID_HEIGHT, color,
-      grid_x * GameWindow::GRID_WIDTH, grid_y * GameWindow::GRID_HEIGHT, color,
-      grid_x * GameWindow::GRID_WIDTH, (grid_y + 1) * GameWindow::GRID_HEIGHT, color
+      (grid_x + 1) * @window.board.tile_size, grid_y * @window.board.tile_size, color,
+      (grid_x + 1) * @window.board.tile_size, (grid_y + 1) * @window.board.tile_size, color,
+      grid_x * @window.board.tile_size, grid_y * @window.board.tile_size, color,
+      grid_x * @window.board.tile_size, (grid_y + 1) * @window.board.tile_size, color
     )
   end
 end

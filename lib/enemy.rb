@@ -47,7 +47,7 @@ class Enemy
   end
   
   def heading
-    cells = @window.surrounding_cells(grid_x, grid_y)
+    cells = @window.board.surrounding_cells(grid_x, grid_y)
     min_distance = cells.select { |c| c.is_a?(Integer) }.min
     case cells.index(min_distance)
       when 0:
@@ -62,11 +62,11 @@ class Enemy
   end
 
   def grid_x
-    ((center_x + 3) / GameWindow::GRID_WIDTH).to_i
+    ((center_x + 3) / @window.board.tile_size).to_i
   end
   
   def grid_y
-    ((center_y + 3) / GameWindow::GRID_HEIGHT).to_i
+    ((center_y + 3) / @window.board.tile_size).to_i
   end
   
   def next_move(direction)

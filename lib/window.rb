@@ -1,4 +1,5 @@
 require 'drawable'
+require 'board'
 require 'tower'
 require 'projectile'
 require 'explosive_projectile'
@@ -6,32 +7,27 @@ require 'enemy'
 require 'round'
 
 class GameWindow < Gosu::Window
-  GRID_WIDTH = 32
-  GRID_HEIGHT = 32
-  GRID_COLOR = 0x5500ff00
+  BOARD_COLOR = 0x5500ff00
+  TILE_SIZE = 32
   
-  attr_accessor :towers, :projectiles, :enemies, :credits
+  attr_accessor :towers, :projectiles, :enemies, :credits, :board, :font
   
   def initialize(rows, columns)
-    super(rows * GRID_WIDTH, columns * GRID_HEIGHT, false)
+    super(rows * TILE_SIZE, columns * TILE_SIZE, false)
     init_keyboard_constants
     self.caption = "Tower"
 
-    @grid_rows = rows
-    @grid_columns = columns
-    @grid = Array.new(columns).collect { |a| Array.new(rows) }
-    
+    self.board = Board.new(self, rows, columns, TILE_SIZE)
+
     @towers = []
     @projectiles = []
     @enemies = []
-    @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
+    self.font = Gosu::Font.new(self, Gosu::default_font_name, 20)
     @enemies_exited = 0
     @cursor = Gosu::Image.new(self, "images/cursor.png", false)
     @credits = 4000
     @potential_tower = Tower.new(self)
     @rounds = []
-    
-    recalculate_grid
   end
 
   def init_keyboard_constants
@@ -47,90 +43,18 @@ class GameWindow < Gosu::Window
     current_round.send_enemy if current_round && current_round.send_enemy_now?
   end
   
-  def recalculate_grid
-    @grid.each_with_index do |column, x|
-      column.each_with_index do |cell, y|
-        @grid[x][y] = nil if @grid[x][y].is_a?(Integer)
-      end
-    end
-    
-    @grid_columns.times do |x|
-      @grid[x][@grid_rows - 1] ||= 1
-    end
-    
-    30.times do
-      @grid.each_with_index do |column, x|
-        column.each_with_index do |cell, y|
-          unless cell.is_a?(Tower)
-            distances = surrounding_cells(x, y).select do |value|
-              value.is_a?(Integer)
-            end
-          
-            distances += [cell]
-            distances.compact!
-            
-            if distances.size > 0
-              min_distance = distances.min
-              if @grid[x][y] == nil || min_distance + 1 < @grid[x][y]
-                @grid[x][y] = min_distance + 1
-              end
-            end
-          end
-        end
-      end
-    end
-  end
-  
-  def surrounding_cells(x, y)
-    distances = []
-    if y + 1 < @grid_rows
-      distances << @grid[x][y + 1]
-    end
-
-    if x > 0
-      distances << @grid[x - 1][y]
-    end
-
-    if x + 1 < @grid_columns
-      distances << @grid[x + 1][y]
-    end
-
-    if y > 0
-      distances << @grid[x][y - 1]
-    end
-    
-    distances
-  end
-  
-  def draw_grid
-    @grid_columns.times do |distance|
-      draw_line(GRID_WIDTH * distance, 0, GRID_COLOR, GRID_WIDTH * distance, height, GRID_COLOR)
-    end
-    @grid_rows.times do |distance|
-      draw_line(0, GRID_HEIGHT * distance, GRID_COLOR, width, GRID_HEIGHT * distance, GRID_COLOR)
-    end
-    
-    @grid.each_with_index do |column, x|
-      column.each_with_index do |cell, y|
-        unless cell.is_a?(Tower)
-          @font.draw(cell, x * GRID_WIDTH + 9, y * GRID_HEIGHT + 9, 0, 1.0, 1.0, GRID_COLOR)
-        end
-      end
-    end
-  end
-
   def draw
-    draw_grid
+    @board.draw(BOARD_COLOR)
     
     (@towers + @enemies + @projectiles).reverse.each do |object|
       object.draw
     end
 
-    @font.draw("Round: #{@rounds.size}", width - 85, 10, 0, 1.0, 1.0, 0xffffff00)
-    @font.draw("Moneys: #{@credits}", 10, 10, 0, 1.0, 1.0, 0xffffff00)
+    font.draw("Round: #{@rounds.size}", width - 85, 10, 0, 1.0, 1.0, 0xffffff00)
+    font.draw("Moneys: #{@credits}", 10, 10, 0, 1.0, 1.0, 0xffffff00)
 
     if @enemies_exited > 0
-      @font.draw("Enemies Exited: #{@enemies_exited}", width - 150, height - 30, 0, 1.0, 1.0, 0xffffff00)
+      font.draw("Enemies Exited: #{@enemies_exited}", width - 150, height - 30, 0, 1.0, 1.0, 0xffffff00)
     end
     
     if round_completed?
@@ -141,7 +65,7 @@ class GameWindow < Gosu::Window
           "Press the N key to start"
         end
 
-      @font.draw(text, width / 2 - 80, height / 2, 0, 1.0, 1.0, 0xffffff00)
+      font.draw(text, width / 2 - 80, height / 2, 0, 1.0, 1.0, 0xffffff00)
     end
     
     if @potential_tower
@@ -172,7 +96,7 @@ class GameWindow < Gosu::Window
   end
   
   def send_enemy
-    @enemies << Enemy.new(self, rand((@grid_columns - 2) * GRID_WIDTH) + GRID_WIDTH, 0)
+    @enemies << Enemy.new(self, rand(@board.width), 0)
   end
   
   def current_round
@@ -184,8 +108,8 @@ class GameWindow < Gosu::Window
     if tower.can_place?
       @credits = @credits - tower.cost
       @towers << tower
-      @grid[tower.grid_x][tower.grid_y] = tower
-      recalculate_grid
+      board.grid[tower.grid_x][tower.grid_y] = tower
+      board.recalculate_grid
     end
   end
   
@@ -225,10 +149,6 @@ class GameWindow < Gosu::Window
     @enemies_exited += 1
   end
   
-  def font
-    @font
-  end
-
   def wall_time
     Gosu::milliseconds
   end
