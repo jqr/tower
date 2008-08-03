@@ -11,6 +11,12 @@ class Board
 
     recalculate_grid
   end
+  
+  def snap(x, y)
+    x_pos = (x / tile_size).floor * tile_size + tile_size * 0.5
+    y_pos = (y / tile_size).floor * tile_size + tile_size * 0.5
+    [x_pos, y_pos]
+  end
 
   def recalculate_grid
     grid.each_with_index do |column, x|

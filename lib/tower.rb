@@ -1,9 +1,10 @@
 class Tower
-  attr_accessor :x, :y, :grid_x, :grid_y
+  include Drawable
+  attr_accessor :x, :y, :image
   
   def initialize(window, x = 0, y = 0, radius = 0)
     @window = window
-    @image = Gosu::Image.new(window, "images/tower.png", false)
+    self.image = Gosu::Image.new(window, "images/tower.png", false)
     @x = x
     @y = y
     @radius = radius
@@ -30,7 +31,7 @@ class Tower
         0x00ffffff + (((1 - reload_percent * 0.75) * 255).to_i << 24)
       end
 
-    @image.draw(x, y, 0, 1, 1, argb)
+    image.draw(x - @image.width / 2, y - @image.height / 2, 0, 1, 1, argb)
 
     draw_sight
   end
@@ -42,11 +43,11 @@ class Tower
   end
   
   def center_x
-    x + @image.width / 2
+    x + image.width / 2
   end  
 
   def center_y
-    y + @image.height / 2
+    y + image.height / 2
   end  
   
   def reload_percent
@@ -71,11 +72,7 @@ class Tower
   end
 
   def place
-    @grid_x = (x + 3) / @window.board.tile_size
-    @grid_y = (y + 3) / @window.board.tile_size
-    x_pos = (@grid_x).floor * @window.board.tile_size + @window.board.tile_size * 0.5 - @image.width / 2
-    y_pos = (@grid_y).floor * @window.board.tile_size + @window.board.tile_size * 0.5 - @image.height / 2
-    [x_pos, y_pos]
+    @window.board.snap(x, y)
   end
   
   def place!

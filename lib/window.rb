@@ -108,7 +108,7 @@ class GameWindow < Gosu::Window
     if tower.can_place?
       @credits = @credits - tower.cost
       @towers << tower
-      board.grid[tower.grid_x][tower.grid_y] = tower
+      board.grid[tower.board_x][tower.board_y] = tower
       board.recalculate_grid
     end
   end
