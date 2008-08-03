@@ -27,7 +27,7 @@ class Enemy
     @image.draw_rot(x + @image.width / 2, y + @image.height / 2, 0, (@frame / 10) % 2 * - 30 + 35, 0.5, 0.5)
     # draw_health
     draw_center_lines
-    highlight_grid
+    
   end
   
   def draw_health
@@ -47,7 +47,7 @@ class Enemy
   end
   
   def heading
-    cells = @window.board.surrounding_cells(grid_x, grid_y)
+    cells = @window.board.surrounding_cells(board_x, board_y)
     min_distance = cells.select { |c| c.is_a?(Integer) }.min
     case cells.index(min_distance)
       when 0:
@@ -59,14 +59,6 @@ class Enemy
       when 3:
         :down
     end
-  end
-
-  def grid_x
-    ((center_x + 3) / @window.board.tile_size).to_i
-  end
-  
-  def grid_y
-    ((center_y + 3) / @window.board.tile_size).to_i
   end
   
   def next_move(direction)

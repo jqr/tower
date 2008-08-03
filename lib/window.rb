@@ -44,7 +44,7 @@ class GameWindow < Gosu::Window
   end
   
   def draw
-    @board.draw(BOARD_COLOR)
+    board.draw(BOARD_COLOR)
     
     (@towers + @enemies + @projectiles).reverse.each do |object|
       object.draw

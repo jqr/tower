@@ -4,13 +4,22 @@ module Drawable
     @window.draw_line(0, center_y, 0xffff0000, @window.width, center_y, 0xffff0000)
   end
   
-  def highlight_grid
+  def highlight_tile
     color = 0xaa00ff00
+    
     @window.draw_quad(
-      (grid_x + 1) * @window.board.tile_size, grid_y * @window.board.tile_size, color,
-      (grid_x + 1) * @window.board.tile_size, (grid_y + 1) * @window.board.tile_size, color,
-      grid_x * @window.board.tile_size, grid_y * @window.board.tile_size, color,
-      grid_x * @window.board.tile_size, (grid_y + 1) * @window.board.tile_size, color
+      (board_x + 1) * @window.board.tile_size, board_y * @window.board.tile_size, color,
+      (board_x + 1) * @window.board.tile_size, (board_y + 1) * @window.board.tile_size, color,
+      board_x * @window.board.tile_size, board_y * @window.board.tile_size, color,
+      board_x * @window.board.tile_size, (board_y + 1) * @window.board.tile_size, color
     )
+  end
+  
+  def board_x
+    ((center_x + 3) / @window.board.tile_size).to_i
+  end
+  
+  def board_y
+    ((center_y + 3) / @window.board.tile_size).to_i
   end
 end
