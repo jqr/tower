@@ -30,15 +30,14 @@ class Round
   end
   
   def time_per_enemy
-    0
-    # extra = 
-    #   if @number < 10
-    #     (10 - @number)
-    #   else
-    #     0
-    #   end
-    #   
-    # 200 + extra * 150
+    extra = 
+      if @number < 10
+        (10 - @number)
+      else
+        0
+      end
+      
+    200 + extra * 150
   end
   
   def all_enemies_sent?
