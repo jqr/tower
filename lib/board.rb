@@ -29,7 +29,7 @@ class Board
       grid[x][rows - 1] ||= 1
     end
     
-    5.times do
+    20.times do
       grid.each_with_index do |column, x|
         column.reverse.each_with_index do |cell, y_converse|
           y = columns  - 1 - y_converse
