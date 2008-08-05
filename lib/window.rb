@@ -10,7 +10,7 @@ class GameWindow < Gosu::Window
   BOARD_COLOR = 0x5500ff00
   TILE_SIZE = 32
   
-  attr_accessor :towers, :projectiles, :enemies, :credits, :board, :font
+  attr_accessor :towers, :projectiles, :enemies, :credits, :board, :font, :debug
   
   def initialize(rows, columns)
     super(rows * TILE_SIZE, columns * TILE_SIZE, false)
@@ -81,6 +81,8 @@ class GameWindow < Gosu::Window
     case id
     when Gosu::Button::KbEscape
       close
+    when Gosu::KbD
+      self.debug = !self.debug
     when Gosu::KbN
       start_round if round_completed?
     when Gosu::Button::MsLeft

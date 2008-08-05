@@ -9,7 +9,7 @@ class Enemy
     @frame = 1
     self.x = x
     self.y = y
-    @health = 100
+    @health = 1000
     @previous_heading = :down
     @font = Gosu::Font.new(@window, Gosu::default_font_name, 15)
     @frame = 0
@@ -29,9 +29,10 @@ class Enemy
     @frame += 1
     @image.draw_rot(x + @image.width / 2, y + @image.height / 2, 0, (@frame / 10) % 2 * - 30 + 35, 0.5, 0.5)
     # draw_health
-    draw_center_lines
-    
-    highlight_tile
+    if @window.debug
+      draw_center_lines
+      highlight_tile
+    end
   end
   
   def draw_health
@@ -51,7 +52,8 @@ class Enemy
   def calculate_heading
     @new_tile = false
     
-    cells = @window.board.surrounding_cells(board_x, board_y(- 11))
+    cells = @window.board.surrounding_cells(board_x, board_y)
+
     min_distance = cells.select { |c| c.is_a?(Integer) }.min
     
     self.heading = 
@@ -81,7 +83,7 @@ class Enemy
   end
   
   def speed
-    0.75
+    0.3
   end
   
   def position
