@@ -29,9 +29,11 @@ class Board
       grid[x][rows - 1] ||= 1
     end
     
-    30.times do
+    5.times do
       grid.each_with_index do |column, x|
-        column.each_with_index do |cell, y|
+        column.reverse.each_with_index do |cell, y_converse|
+          y = columns  - 1 - y_converse
+          
           unless cell.is_a?(Tower)
             distances = surrounding_cells(x, y).select do |value|
               value.is_a?(Integer)
