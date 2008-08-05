@@ -79,17 +79,19 @@ class Board
   end
   
   def draw(color)
-    columns.times do |distance|
-      @window.draw_line(tile_size * distance, 0, color, tile_size * distance, @window.height, color)
-    end
-    rows.times do |distance|
-      @window.draw_line(0, tile_size * distance, color, @window.width, tile_size * distance, color)
-    end
+    if @window.debug
+      columns.times do |distance|
+        @window.draw_line(tile_size * distance, 0, color, tile_size * distance, @window.height, color)
+      end
+      rows.times do |distance|
+        @window.draw_line(0, tile_size * distance, color, @window.width, tile_size * distance, color)
+      end
     
-    grid.each_with_index do |column, x|
-      column.each_with_index do |cell, y|
-        unless cell.is_a?(Tower)
-          @window.font.draw(cell, x * tile_size + 9, y * tile_size + 9, 0, 1.0, 1.0, color)
+      grid.each_with_index do |column, x|
+        column.each_with_index do |cell, y|
+          unless cell.is_a?(Tower)
+            @window.font.draw(cell, x * tile_size + 9, y * tile_size + 9, 0, 1.0, 1.0, color)
+          end
         end
       end
     end
