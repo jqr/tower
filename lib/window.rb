@@ -14,7 +14,6 @@ class GameWindow < Gosu::Window
   
   def initialize(rows, columns)
     super(rows * TILE_SIZE, columns * TILE_SIZE, false)
-    init_keyboard_constants
     self.caption = "Tower"
 
     self.board = Board.new(self, rows, columns, TILE_SIZE)
@@ -30,12 +29,6 @@ class GameWindow < Gosu::Window
     @rounds = []
   end
 
-  def init_keyboard_constants
-    ('a'..'z').each do |letter|
-      eval "Gosu::Kb#{letter.upcase} = #{self.char_to_button_id(letter)}"
-    end
-  end
-  
   def update
     (@towers + @projectiles + @enemies).each do |object|
       object.update
