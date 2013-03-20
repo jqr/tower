@@ -1,5 +1,5 @@
-require 'rubygems'
-require 'gosu'
+require "bundler"
+Bundler.require(:default)
 
 $: << 'lib'
 require 'window'
