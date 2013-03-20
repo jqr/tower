@@ -58,13 +58,13 @@ class Enemy
 
     self.heading =
       case cells.index(min_distance)
-        when 0:
+        when 0
           :down
-        when 1:
+        when 1
           :left
-        when 2: 
+        when 2
           :right
-        when 3:
+        when 3
           :up
       end
   end
